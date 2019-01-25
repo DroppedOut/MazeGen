@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 using System.IO;
+using System.Threading;
+using System;
 
 public class SimpleControl : MonoBehaviour {
 	
@@ -114,29 +116,72 @@ public class SimpleControl : MonoBehaviour {
         //Rotate Tank
         transform.Rotate(new Vector3(0f, rotateSpeed, 0f));
     }
+    int tmp = 0;
     void Update () {
-
-
+        
 
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
-
-        if (Physics.Raycast(transform.position, fwd, 10))
+        
+        if ((Physics.Raycast(transform.position, fwd, 10))&&(tmp%20==1))
+        {
             print("There is something in front of the object!");
+        }
 
 
         Vector3 lft = transform.TransformDirection(Vector3.left);
-
-        if (Physics.Raycast(transform.position, lft, 10))
-            print("There is something in left of the object!");
-
-
         Vector3 rght = transform.TransformDirection(Vector3.right);
 
-        if (Physics.Raycast(transform.position, rght, 10))
-            print("There is something in right of the object!");
+        if ((Physics.Raycast(transform.position, fwd, 10))) {
+               
+            if ((Physics.Raycast(transform.position, lft, 10))){
+                print("napravo blya");
+            
+                    GoBack();
+                TurnRight();
+            }
+            }
+            else
+             if ((Physics.Raycast(transform.position, fwd, 10)))
+        {
+
+            if ((Physics.Raycast(transform.position, rght, 10)))
+            {
+                print("LEEEEEEEEVO");
+                GoBack();
+                TurnLeft();
 
 
 
+            }
+        }
+        forward();
+      
+
+        if ((Physics.Raycast(transform.position, lft, 10)))
+        {
+
+            if ((Physics.Raycast(transform.position, rght, 10)))
+            {
+                print("Ebashu pryamo");
+                
+            }
+        }
+
+
+
+      
+
+       
+
+
+        // ИИ ЕЗДОКА
+
+
+
+       
+
+
+        tmp++;
 
         //Keyboard moves =======================================//
         //Forward Move
