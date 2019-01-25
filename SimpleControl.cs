@@ -4,7 +4,6 @@ using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 using System.IO;
 using System.Threading;
-using System;
 
 public class SimpleControl : MonoBehaviour {
 	
@@ -44,17 +43,17 @@ public class SimpleControl : MonoBehaviour {
         //Right wheels rotate
         foreach (GameObject wheelR in RightWheels)
         {
-            wheelR.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
+            wheelR.transform.Rotate(new Vector3(-wheelsSpeed, 0f, 0f));
         }
         //left track texture offset
-        LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * -tracksSpeed);
+        LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0, Time.deltaTime * -tracksSpeed);
         //right track texture offset
-        RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * -tracksSpeed);
+        RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0, Time.deltaTime * -tracksSpeed);
         //Move Tank
         transform.Translate(new Vector3(0f, 0f, -forwardSpeed));
 
     }
-    void forward()
+    void Forward()
     {
         if ((CanForward) && (!ToggleCharacterControl))
         { 
@@ -65,12 +64,12 @@ public class SimpleControl : MonoBehaviour {
         //Right wheels rotate
         foreach (GameObject wheelR in RightWheels)
         {
-            wheelR.transform.Rotate(new Vector3(-wheelsSpeed, 0f, 0f));
+            wheelR.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
         }
         //left track texture offset
-        LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * tracksSpeed);
+        LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0, Time.deltaTime * tracksSpeed);
         //right track texture offset
-        RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * tracksSpeed);
+        RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0, Time.deltaTime * tracksSpeed);
 
         //Move Tank
 
@@ -78,27 +77,8 @@ public class SimpleControl : MonoBehaviour {
         }
 
     }
-   
-    void TurnLeft()
+    void TurnLeft(int deg=1)
     {
-        //Left wheels rotate
-        foreach (GameObject wheelL in LeftWheels)
-        {
-            wheelL.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
-        }
-        //Right wheels rotate
-        foreach (GameObject wheelR in RightWheels)
-        {
-            wheelR.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
-        }
-        //left track texture offset
-        LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * tracksSpeed);
-        //right track texture offset
-        RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * -tracksSpeed);
-        //Rotate Tank
-        transform.Rotate(new Vector3(0f, -rotateSpeed, 0f));
-    }
-    void TurnRight() {
         //Left wheels rotate
         foreach (GameObject wheelL in LeftWheels)
         {
@@ -107,177 +87,112 @@ public class SimpleControl : MonoBehaviour {
         //Right wheels rotate
         foreach (GameObject wheelR in RightWheels)
         {
+            wheelR.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
+        }
+        //left track texture offset
+        LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0, Time.deltaTime * -tracksSpeed);
+        //right track texture offset
+        RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0, Time.deltaTime * tracksSpeed);
+        //Rotate Tank
+        transform.Rotate(new Vector3(0f, -deg, 0f));
+    }
+    void TurnRight(int deg = 1) {
+        //Left wheels rotate
+        foreach (GameObject wheelL in LeftWheels)
+        {
+            wheelL.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
+        }
+        //Right wheels rotate
+        foreach (GameObject wheelR in RightWheels)
+        {
             wheelR.transform.Rotate(new Vector3(-wheelsSpeed, 0f, 0f));
+        }
+        //left track texture offset
+        LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0, Time.deltaTime * tracksSpeed);
+        //right track texture offset
+        RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0, Time.deltaTime * -tracksSpeed);
+        //Rotate Tank
+        transform.Rotate(new Vector3(0f, deg, 0f));
+    }
+    void Backward()
+    {
+        //Left wheels rotate
+        foreach (GameObject wheelL in LeftWheels)
+        {
+            wheelL.transform.Rotate(new Vector3(-wheelsSpeed, 0f, 0f));
+        }
+        //Right wheels rotate
+        foreach (GameObject wheelR in RightWheels)
+        {
+            wheelR.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
         }
         //left track texture offset
         LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * -tracksSpeed);
         //right track texture offset
-        RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * tracksSpeed);
-        //Rotate Tank
-        transform.Rotate(new Vector3(0f, rotateSpeed, 0f));
+        RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * -tracksSpeed);
+        //Move Tank
+        transform.Translate(new Vector3(0f, 0f, -forwardSpeed));
     }
-    int tmp = 0;
-    void Update () {
-        
-
-        Vector3 fwd = transform.TransformDirection(Vector3.forward);
-        
-        if ((Physics.Raycast(transform.position, fwd, 10))&&(tmp%20==1))
-        {
-            print("There is something in front of the object!");
-        }
-
-
-        Vector3 lft = transform.TransformDirection(Vector3.left);
-        Vector3 rght = transform.TransformDirection(Vector3.right);
-
-        if ((Physics.Raycast(transform.position, fwd, 10))) {
-               
-            if ((Physics.Raycast(transform.position, lft, 10))){
-                print("napravo blya");
-            
-                    GoBack();
-                TurnRight();
-            }
-            }
-            else
-             if ((Physics.Raycast(transform.position, fwd, 10)))
-        {
-
-            if ((Physics.Raycast(transform.position, rght, 10)))
-            {
-                print("LEEEEEEEEVO");
-                GoBack();
-                TurnLeft();
-
-
-
-            }
-        }
-        forward();
-      
-
-        if ((Physics.Raycast(transform.position, lft, 10)))
-        {
-
-            if ((Physics.Raycast(transform.position, rght, 10)))
-            {
-                print("Ebashu pryamo");
-                
-            }
-        }
-
-
-
-      
-
-       
-
-
-        // ИИ ЕЗДОКА
-
-
-
-       
-
-
-        tmp++;
-
+    void KeyBoardRules()
+    {
         //Keyboard moves =======================================//
         //Forward Move
-
-        if (Input.GetKey(KeyCode.R)) {
-            ToggleCharacterControl = true;
-
-        }
-
-
-            if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
         {
-            //Left wheels rotate
-            foreach (GameObject wheelL in LeftWheels)
-            {
-                wheelL.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
-            }
-            //Right wheels rotate
-            foreach (GameObject wheelR in RightWheels)
-            {
-                wheelR.transform.Rotate(new Vector3(-wheelsSpeed, 0f, 0f));
-            }
-            //left track texture offset
-            LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f,Time.deltaTime*tracksSpeed);
-            //right track texture offset
-            RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * tracksSpeed);
-
-            //Move Tank
-
-            transform.Translate(new Vector3(0f, 0f, forwardSpeed));
+            Forward();
 
         }
         //Back Move
         if (Input.GetKey(KeyCode.S))
         {
-            //Left wheels rotate
-            foreach (GameObject wheelL in LeftWheels)
-            {
-                wheelL.transform.Rotate(new Vector3(-wheelsSpeed, 0f, 0f));
-            }
-            //Right wheels rotate
-            foreach (GameObject wheelR in RightWheels)
-            {
-                wheelR.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
-            }
-            //left track texture offset
-            LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * -tracksSpeed);
-            //right track texture offset
-            RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * -tracksSpeed);
-            //Move Tank
-            transform.Translate(new Vector3(0f, 0f, -forwardSpeed));
+            Backward();
         }
         //On Left
         if (Input.GetKey(KeyCode.A))
         {
-            //Left wheels rotate
-            foreach (GameObject wheelL in LeftWheels)
-            {
-                wheelL.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
-            }
-            //Right wheels rotate
-            foreach (GameObject wheelR in RightWheels)
-            {
-                wheelR.transform.Rotate(new Vector3(wheelsSpeed, 0f, 0f));
-            }
-            //left track texture offset
-            LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * tracksSpeed);
-            //right track texture offset
-            RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * -tracksSpeed);
-            //Rotate Tank
-            transform.Rotate(new Vector3(0f,-rotateSpeed,0f));
+            TurnLeft();
         }
         //On Right
         if (Input.GetKey(KeyCode.D))
         {
-            //Left wheels rotate
-            foreach (GameObject wheelL in LeftWheels)
-            {
-                wheelL.transform.Rotate(new Vector3(-wheelsSpeed, 0f, 0f));
-            }
-            //Right wheels rotate
-            foreach (GameObject wheelR in RightWheels)
-            {
-                wheelR.transform.Rotate(new Vector3(-wheelsSpeed, 0f, 0f));
-            }
-            //left track texture offset
-            LeftTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * -tracksSpeed);
-            //right track texture offset
-            RightTrack.transform.GetComponent<Renderer>().material.mainTextureOffset += new Vector2(0f, Time.deltaTime * tracksSpeed);
-            //Rotate Tank
-            transform.Rotate(new Vector3(0f, rotateSpeed, 0f));
+            TurnRight();
         }
-		//=======================================//
-                                                   
+        //=======================================//
+    }
+    void Update () {
+        Vector3 fwd = transform.TransformDirection(Vector3.forward);
+        Vector3 lft = transform.TransformDirection(Vector3.left);
+        Vector3 rght = transform.TransformDirection(Vector3.right);
+
+        Forward();
+ 
+
+       
+
+        if (Physics.Raycast(transform.position, fwd, 4))
+            print("There is something in front of the object!");
 
 
 
+        if (Physics.Raycast(transform.position, lft, 4))
+            print("There is something in left of the object!");
+
+
+       
+
+        if ((Physics.Raycast(transform.position, rght, 4))&&(Physics.Raycast(transform.position, fwd, 4)))
+        {
+            print("Right&Forward");
+            TurnLeft(90);
+        }
+        else
+         if ((Physics.Raycast(transform.position, lft, 4)) && (Physics.Raycast(transform.position, fwd, 4)))
+        {
+            print("Left&Forward");
+            TurnRight(90);
+        }
+
+
+        KeyBoardRules();
     }
 }
